@@ -5,10 +5,11 @@ import * as vocabNs from "@ocss/ts/vocab";
 import { ed25519Sign } from "@ocss/ts";
 import { verifyDocument, fromVerifiedDocument, Resolver } from "@ocss/ts";
 import type { TrustListDocument, SignedDocument, Entry } from "@ocss/ts";
+import type { Envelope } from "@ocss/ts";
 
 export { marshal, ed25519Sign, verifyDocument, fromVerifiedDocument, Resolver };
 export const vocab = vocabNs;
-export type { TrustListDocument, SignedDocument, Entry };
+export type { TrustListDocument, SignedDocument, Entry, Envelope };
 
 export function b64urlEncode(b: Uint8Array): string {
   return Buffer.from(b).toString("base64url");
