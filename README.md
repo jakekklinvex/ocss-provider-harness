@@ -1,17 +1,25 @@
-# @ocss/provider-harness
+# @openchildsafety/provider-harness
 
 Independent OCSS conformance harness. A **verifying-agency** runs it against a provider
 enclave, then signs the resulting `conformance_attestation` with its own Ed25519 key. This
 project is intentionally independent of Phosra (the CA model: a verifier cannot accredit a
-service it operates). It reuses the OCSS crypto from `@ocss/ts` (vendored tarball, behind
-`src/crypto-adapter.ts`).
+service it operates). The OCSS crypto it uses (JCS canon + Ed25519 + the closed vocab) is
+inlined under `src/crypto/` behind the single `src/crypto-adapter.ts` seam, so the package has
+**zero runtime dependencies**; a dev-only parity test keeps the inlined copies byte-identical to
+the OCSS reference implementation (`@openchildsafety/ocss`).
 
 ## Assertions
 - **A1** closed-enum fail-closed · **A2** content-free signal lane · **A5** minimization
   attestation (salted-HMAC Merkle) · **A7** attestation-fail → suspend — **passable today**.
 - **A3 / A4 / A6** — declared `pending` (consent infra / capability endpoint / advocate lane).
 
-## Use
+## Install
+```bash
+npm install @openchildsafety/provider-harness
+npx ocss-harness run --enclave ref          # probe the reference enclave + print the report
+```
+
+## Develop (from a clone)
 ```bash
 npm install
 npx vitest run                              # full test suite

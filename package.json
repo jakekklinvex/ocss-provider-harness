@@ -1,5 +1,5 @@
 {
-  "name": "@ocss/provider-harness",
+  "name": "@openchildsafety/provider-harness",
   "version": "0.1.0",
   "description": "Independent OCSS verifying-agency conformance harness: probe a provider enclave against assertions A1/A2/A5/A7 and build/sign/verify a conformance_attestation.",
   "type": "module",
