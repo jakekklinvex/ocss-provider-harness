@@ -1,6 +1,6 @@
 {
   "name": "@openchildsafety/provider-harness",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Independent OCSS verifying-agency conformance harness: probe a provider enclave against assertions A1/A2/A5/A7 and build/sign/verify a conformance_attestation.",
   "type": "module",
   "license": "MIT",
@@ -8,7 +8,10 @@
   "bin": { "ocss-harness": "./dist/src/cli.js" },
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
-  "exports": { ".": { "import": "./dist/src/index.js", "types": "./dist/src/index.d.ts" } },
+  "exports": {
+    ".": { "import": "./dist/src/index.js", "types": "./dist/src/index.d.ts" },
+    "./package.json": "./package.json"
+  },
   "files": ["dist", "README.md", "LICENSE"],
   "publishConfig": { "access": "public" },
   "keywords": ["ocss", "child-safety", "conformance", "attestation", "verifying-agency"],
