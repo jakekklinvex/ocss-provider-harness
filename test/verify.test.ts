@@ -51,4 +51,24 @@ describe("verifyAttestation", () => {
     const tl = mintTrustList([vaEntry("did:ocss:va", "va-k", va.xB64Url)], root.pkcs8Pem);
     expect(() => verifyAttestation(att, tl, root.xB64Url, () => Date.parse("2026-07-01T00:00:00Z"))).toThrow(/missing_liability_scope/);
   });
+  it("rejects an unknown key_id", () => {
+    const root = makeEd25519(); const va = makeEd25519();
+    const att = signAttestation(BASE, { pkcs8Pem: va.pkcs8Pem, key_id: "va-k" });
+    att.key_id = "not-registered";
+    const tl = mintTrustList([vaEntry("did:ocss:va", "va-k", va.xB64Url)], root.pkcs8Pem);
+    expect(() => verifyAttestation(att, tl, root.xB64Url, () => Date.parse("2026-07-01T00:00:00Z"))).toThrow(/unknown_signer/);
+  });
+  it("rejects a tampered trust-list document (bad ROOT sig)", () => {
+    const root = makeEd25519(); const va = makeEd25519();
+    const att = signAttestation(BASE, { pkcs8Pem: va.pkcs8Pem, key_id: "va-k" });
+    const tl = mintTrustList([vaEntry("did:ocss:va", "va-k", va.xB64Url)], root.pkcs8Pem);
+    tl.document = tl.document.replace("VA", "XX");
+    expect(() => verifyAttestation(att, tl, root.xB64Url, () => Date.parse("2026-07-01T00:00:00Z"))).toThrow(/bad_signature/);
+  });
+  it("rejects an expired signer entry", () => {
+    const root = makeEd25519(); const va = makeEd25519();
+    const att = signAttestation(BASE, { pkcs8Pem: va.pkcs8Pem, key_id: "va-k" });
+    const tl = mintTrustList([vaEntry("did:ocss:va", "va-k", va.xB64Url)], root.pkcs8Pem);
+    expect(() => verifyAttestation(att, tl, root.xB64Url, () => Date.parse("2026-07-10T00:00:00Z"))).toThrow(/not_verifying_agency/);
+  });
 });
