@@ -1,6 +1,6 @@
 import type { EnclaveUnderTest } from "../../src/contract/enclave.js";
 import { makeReferenceEnclave } from "../../reference-enclave/index.js";
-import { buildMinimization } from "../../src/merkle.js";
+import { buildMinimization, merkleRoot } from "../../src/merkle.js";
 import { createHash } from "node:crypto";
 
 // A1 mutant: coerces any declared harm class to a valid one (passes bogus input through).
@@ -37,6 +37,21 @@ export function mutantA5RawHashLeaves(): EnclaveUnderTest {
       return out;
     },
   };
+}
+
+// A5 mutant: raw sha256 leaves with a CORRECTLY recomputed Merkle root.
+// The recompute gate passes; the raw-hash (brute-force) gate must fire.
+export function mutantA5RawLeavesValidRoot(): EnclaveUnderTest {
+  const ref = makeReferenceEnclave();
+  return { ...wrap(ref), classify: async (i) => {
+    const out = await ref.classify(i);
+    if (out.kind === "signal") {
+      const fields = ["grooming", "severity:moderate", `len:${i.content.length}`];
+      const leaves = fields.map((f) => createHash("sha256").update(f).digest("hex"));
+      out.minimization = { alg: "hmac-sha256+merkle", leaves, merkle_root: merkleRoot(leaves), salt_commitment: createHash("sha256").update("salt").digest("hex") };
+    }
+    return out;
+  }};
 }
 
 // A7 mutant: ignores attestation failure and emits a signal anyway.

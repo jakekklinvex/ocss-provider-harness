@@ -3,11 +3,10 @@ import * as nodeCrypto from "node:crypto";
 import { marshal } from "@ocss/ts/canon";
 import * as vocabNs from "@ocss/ts/vocab";
 import { ed25519Sign } from "@ocss/ts";
-import { verifyDocument, fromVerifiedDocument, Resolver } from "@ocss/ts";
 import type { TrustListDocument, SignedDocument, Entry } from "@ocss/ts";
 import type { Envelope } from "@ocss/ts";
 
-export { marshal, ed25519Sign, verifyDocument, fromVerifiedDocument, Resolver };
+export { marshal, ed25519Sign };
 export const vocab = vocabNs;
 export type { TrustListDocument, SignedDocument, Entry, Envelope };
 

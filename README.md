@@ -22,5 +22,16 @@ npm run harness -- sign   --key va.pem --key-id va-2026-06 att.json > signed.jso
 npm run harness -- verify --trust-list trust-list.json --root-x <rootKeyX> signed.json
 ```
 
+## v0 scope & limitations
+
+- The reference enclave emits a **structural/mock** OCSS envelope (a plain object), not yet
+  produced via `@ocss/ts` `seal`/`signSender`; A2 inspects structure rather than calling
+  `@ocss/ts` `validate`/`open`.
+- `verify` checks attestations against the harness's **own fixture Trust-List shape**
+  (`{document, sig, key_id}` with a `role` field on entries), NOT yet the live `@ocss/ts`
+  `SignedDocument`/`Entry` wire form — because the `verifying-agency` role does not exist in
+  the OCSS census yet, so there is no real VA Trust-List entry to test against.
+- Real-Trust-List and real-envelope interop are deliberate follow-on work.
+
 ## Refreshing the vendored crypto
 `scripts/refresh-ocss-ts.sh` re-packs `@ocss/ts` from the monorepo when its crypto changes.

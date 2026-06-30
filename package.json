@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": { "node": ">=20" },
-  "bin": { "ocss-harness": "./dist/cli.js" },
+  "bin": { "ocss-harness": "./dist/src/cli.js" },
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc -p tsconfig.test.json",
